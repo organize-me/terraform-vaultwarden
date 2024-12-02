@@ -37,7 +37,7 @@ variable "postgres_host" {
 variable "postgres_port" {
   type = string
 }
-variable "postgres_root_user" {
+variable "postgres_root_username" {
   type = string
 }
 variable "postgres_root_password" {
@@ -47,7 +47,7 @@ variable "postgres_root_password" {
 # --== Vaultwarden Variables ==--
 variable "vaultwarden_image" {
   type = string
-  default = "vaultwarden/server:1.32.4"
+  default = "vaultwarden/server:1.32.5"
 }
 variable "vaultwarden_db_host" {
   type = string
@@ -67,9 +67,19 @@ variable "vaultwarden_admin_token" {
 variable "vaultwarden_domain" {
   type = string
 }
+variable "vaultwarden_network_alias" {
+  type = string
+  default = "vaultwarden"
+}
 
 # --== Backup/Restore Variables ==--
 variable "backup_docker_postgres_image" {
   type = string
   default = "postgres:17"
+}
+variable "backup_install_path" {
+  type = string
+}
+variable "backup_tmp_dir" {
+  type = string
 }

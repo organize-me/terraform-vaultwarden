@@ -1,0 +1,87 @@
+#!/bin/sh
+
+export TEMP_DIR_HOST="${TF_BACKUP_TMP_DIR}"
+
+# Clean up
+cleanup () {
+  echo "Cleanup Start"
+
+  # Delete the temporary directory
+  if [ -d "$TEMP_DIR_HOST" ]; then
+    echo "Deleting temporary directory"
+    rm -rf "$TEMP_DIR_HOST"
+  fi
+
+  echo "Restarting wikijs container"
+  docker restart ${TF_VAULTWARDEN_CONTAINER_NAME} || exit 1
+
+  echo "Cleanup Complete"
+}
+
+# Halt the script
+halt () {
+  # $1 - Exit code (optional)
+  # $2 - Message (optional)
+
+  if [ -n "$1" ]; then
+    EXIT_CODE=$1
+  else
+    EXIT_CODE=0
+  fi
+
+  cleanup
+
+  # Exit
+  if [ "$EXIT_CODE" -ne 0 ]; then
+    if [ -n "$2" ]; then
+      echo "Backup Failed: $2"
+    else
+      echo "Backup Failed"
+    fi
+  fi
+  exit "$EXIT_CODE"
+}
+
+# backup the database
+backup_database() {
+  mkdir -p "$TEMP_DIR_HOST/backup/db" || halt 1 "Failed to create temporary directory"
+  cd "$TEMP_DIR_HOST/backup/db" || halt 1 "Failed to change directory"
+
+  docker run --rm \
+    --name "vaultwarden_backup" \
+    --network "${TF_DOCKER_NETWORK_NAME}" \
+    --entrypoint "pg_dump" \
+    --env "PGPASSWORD=${TF_POSTGRES_PASSWORD}" \
+    "${TF_POSTGRES_IMAGE}" \
+    --clean -U "${TF_POSTGRES_USERNAME}" -h "${TF_POSTGRES_HOST}" -p "${TF_POSTGRES_PORT}" -d "${TF_POSTGRES_DB}" \
+     > "./${TF_POSTGRES_DUMP_NAME}" || halt 1 "Failed to backup database"
+}
+
+backup_volume() {
+    mkdir -p "$TEMP_DIR_HOST/backup/volume" || halt 1 "Failed to create temporary directory"
+
+    docker run --rm \
+        --name "vaultwarden_backup" \
+        -v "${TF_VAULTWARDEN_VOLUME}:/volume" \
+        -v "$TEMP_DIR_HOST/backup/volume:/target" \
+        alpine:3.14 \
+        sh -c "cp -r /volume/* /target/" || halt 1 "Failed to copy volume"
+}
+
+backup() {
+    docker stop ${TF_VAULTWARDEN_CONTAINER_NAME} || halt 1 "Failed to stop container"
+
+    backup_database
+    backup_volume
+
+    docker start ${TF_VAULTWARDEN_CONTAINER_NAME} || halt 1 "Failed to start container"
+}
+
+# Capture start time
+START_TIME=$(date +%s)
+
+# Ensure elapsed time is displayed on exit
+trap 'ELAPSED_TIME=$(($(date +%s) - $START_TIME)); echo "Execution time: $ELAPSED_TIME seconds"' EXIT
+
+# Run the backup process
+backup

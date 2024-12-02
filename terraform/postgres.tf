@@ -1,10 +1,9 @@
 provider "postgresql" {
   host = var.postgres_host
   port = var.postgres_port
-  username = var.postgres_root_user
+  username = var.postgres_root_username
   password = var.postgres_root_password
   sslmode = "disable"
-
 }
 
 # Create the database

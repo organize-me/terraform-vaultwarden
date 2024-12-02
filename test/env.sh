@@ -15,3 +15,5 @@ export TF_VAR_vaultwarden_db_port=$TF_VAR_postgres_port
 export TF_VAR_vaultwarden_db_username="vaultwarden"
 export TF_VAR_vaultwarden_db_password="password"
 export TF_VAR_vaultwarden_domain="http://localhost:8080"
+export TF_VAR_backup_install_path="../tmp/install"
+export TF_VAR_backup_tmp_dir="../tmp/tmp"

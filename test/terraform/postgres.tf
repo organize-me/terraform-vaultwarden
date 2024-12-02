@@ -16,7 +16,7 @@ resource "docker_container" "postgres" {
 
   # Configures the health check for the PostgreSQL container.
   healthcheck {
-    test     = ["CMD-SHELL", "pg_isready -U ${var.postgres_root_user}"]
+    test     = ["CMD-SHELL", "pg_isready -U ${var.postgres_root_username}"]
     interval = "30s"
     timeout  = "10s"
     retries  = 5
@@ -31,7 +31,7 @@ resource "docker_container" "postgres" {
   # Sets environment variables for the PostgreSQL container.
   env = [
     "TZ=${var.timezone}",
-    "POSTGRES_USER=${var.postgres_root_user}",
+    "POSTGRES_USER=${var.postgres_root_username}",
     "POSTGRES_PASSWORD=${var.postgres_root_password}"
   ]
 

@@ -3,7 +3,7 @@ resource "docker_image" "vaultwarden" {
 }
 
 # Create a volume for the pihole configuration
-resource "docker_volume" "vaultwarden_data" {
+resource "docker_volume" "vaultwarden" {
   name = "vaultwarden_data"
 }
 
@@ -44,12 +44,12 @@ resource "docker_container" "vaultwarden" {
 
   networks_advanced {
     name = data.docker_network.network.name
-    aliases = ["vaultwarden"]
+    aliases = [var.vaultwarden_network_alias]
   }
 
   volumes {
     container_path = "/data"
-    volume_name    = docker_volume.vaultwarden_data.name
+    volume_name    = docker_volume.vaultwarden.name
     read_only      = false
   }
 

@@ -33,7 +33,7 @@ variable "backup_docker_postgres_image" {
 variable "postgres_port" {
   type = string
 }
-variable "postgres_root_user" {
+variable "postgres_root_username" {
   description = "The PostgreSQL username"
   type        = string
 }
@@ -41,5 +41,3 @@ variable "postgres_root_password" {
   description = "The PostgreSQL password"
   type        = string
 }
-
-
