@@ -4,9 +4,6 @@ variable "timezone" {
 }
 
 # --== SMTP Variables ==--
-variable "smtp_host" {
-  type = string
-}
 variable "smtp_port" {
   type = string
 }
@@ -30,6 +27,7 @@ variable "backup_docker_postgres_image" {
   type = string
   default = "postgres:17"
 }
+
 variable "postgres_port" {
   type = string
 }
@@ -39,5 +37,21 @@ variable "postgres_root_username" {
 }
 variable "postgres_root_password" {
   description = "The PostgreSQL password"
+  type        = string
+}
+
+variable "minio_docker_image" {
+  type = string
+}
+variable "minio_root_user" {
+  description = "The MinIO username"
+  type        = string
+}
+variable "minio_root_password" {
+  description = "The MinIO password"
+  type        = string
+}
+variable "backup_s3_bucket" {
+  description = "The S3 bucket to store backups"
   type        = string
 }

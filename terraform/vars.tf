@@ -77,9 +77,21 @@ variable "backup_docker_postgres_image" {
   type = string
   default = "postgres:17"
 }
+variable "backup_docker_aws_image" {
+  type = string
+  default = "amazon/aws-cli:2.18.9"
+}
 variable "backup_install_path" {
   type = string
 }
 variable "backup_tmp_dir" {
   type = string
+}
+variable "backup_archive_name" {
+  type = string
+  default = "vaultwarden-backup.tar.gz"
+}
+variable "backup_s3_bucket" {
+  description = "The S3 bucket to store backups"
+  type        = string
 }
