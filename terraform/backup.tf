@@ -12,8 +12,8 @@ resource "local_file" "backup_script" {
     TF_POSTGRES_IMAGE             = var.backup_docker_postgres_image
     TF_POSTGRES_HOST              = var.vaultwarden_db_host
     TF_POSTGRES_PORT              = var.vaultwarden_db_port
-    TF_POSTGRES_USERNAME          = var.postgres_root_username
-    TF_POSTGRES_PASSWORD          = var.postgres_root_password
+    TF_POSTGRES_USERNAME          = var.vaultwarden_db_username
+    TF_POSTGRES_PASSWORD          = var.vaultwarden_db_password
     TF_POSTGRES_DB                = postgresql_database.vaultwarden.name
     TF_POSTGRES_DUMP_NAME         = "vaultwarden.sql"
   })
@@ -45,8 +45,8 @@ resource "local_file" "restore_script" {
     TF_POSTGRES_HOST              = var.vaultwarden_db_host
     TF_POSTGRES_PORT              = var.vaultwarden_db_port
     TF_POSTGRES_IMAGE             = var.backup_docker_postgres_image
-    TF_POSTGRES_USERNAME          = var.postgres_root_username
-    TF_POSTGRES_PASSWORD          = var.postgres_root_password
+    TF_POSTGRES_USERNAME          = var.vaultwarden_db_username
+    TF_POSTGRES_PASSWORD          = var.vaultwarden_db_password
     TF_POSTGRES_DB                = postgresql_database.vaultwarden.name
     TF_POSTGRES_DUMP_NAME         = "vaultwarden.sql"
     TF_VAULTWARDEN_VOLUME         = docker_volume.vaultwarden.name
