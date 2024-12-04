@@ -61,12 +61,20 @@ backup_database() {
 backup_volume() {
     mkdir -p "$TEMP_DIR_HOST/volume" || halt 1 "Failed to create temporary directory"
 
+    # Copy the volume to the temporary directory
     docker run --rm \
         --name "vaultwarden_backup" \
         -v "${TF_VAULTWARDEN_VOLUME}:/volume" \
         -v "$TEMP_DIR_HOST/volume:/target" \
         alpine:3.14 \
         sh -c "cp -r /volume/* /target/" || halt 1 "Failed to copy volume"
+
+    # Set the temporary directory's ownership to the current user
+    docker run --rm \
+        --name "vaultwarden_backup" \
+        -v "$TEMP_DIR_HOST/volume:/target" \
+        alpine:3.14 \
+        sh -c "chown -R $(id -u):$(id -g) /target" || halt 1 "Failed to set volume permissions"
 }
 
 archive_backups() {
