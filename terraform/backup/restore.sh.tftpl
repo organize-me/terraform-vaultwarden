@@ -101,13 +101,13 @@ restore_database() {
 
   # Restore the database
     docker run --rm \
-      --name "vaultwarden_restore" \
-      --network "${TF_DOCKER_NETWORK_NAME}" \
+      --name 'vaultwarden_restore' \
+      --network '${TF_DOCKER_NETWORK_NAME}' \
       --volume "$TEMP_DIR_HOST:/root:ro" \
-      --entrypoint "psql" \
-      --env "PGPASSWORD=${TF_POSTGRES_PASSWORD}" \
-      "${TF_POSTGRES_IMAGE}" \
-      -U "${TF_POSTGRES_USERNAME}" -h "${TF_POSTGRES_HOST}" -p "${TF_POSTGRES_PORT}" -d "${TF_POSTGRES_DB}" -f "/root/db/${TF_POSTGRES_DUMP_NAME}" || halt 1 "Failed to restore backup"
+      --entrypoint 'psql' \
+      --env 'PGPASSWORD=${TF_POSTGRES_PASSWORD}' \
+      '${TF_POSTGRES_IMAGE}' \
+      -U '${TF_POSTGRES_USERNAME}' -h '${TF_POSTGRES_HOST}' -p '${TF_POSTGRES_PORT}' -d '${TF_POSTGRES_DB}' -f '/root/db/${TF_POSTGRES_DUMP_NAME}' || halt 1 "Failed to restore backup"
 
   echo "Restore Database Complete"
 }
