@@ -71,6 +71,10 @@ variable "vaultwarden_network_alias" {
   type = string
   default = "vaultwarden"
 }
+variable "vaultwarden_accept_invalid_certs" {
+  type = bool
+  default = false
+}
 
 # --== Backup/Restore Variables ==--
 variable "backup_docker_postgres_image" {

@@ -39,7 +39,7 @@ resource "docker_container" "vaultwarden" {
     "SMTP_USERNAME=${var.smtp_username}",
     "SMTP_PASSWORD=${var.smtp_password}",
     "SMTP_AUTH_MECHANISM=Login",
-    "SMTP_ACCEPT_INVALID_CERTS=true"
+    "SMTP_ACCEPT_INVALID_CERTS=${var.vaultwarden_accept_invalid_certs}",
   ]
 
   networks_advanced {
