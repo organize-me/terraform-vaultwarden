@@ -55,7 +55,7 @@ resource "docker_container" "vaultwarden" {
 
   ports {
     internal = 80
-    external = 8080
+    external = 8008
   }
 
   depends_on = [postgresql_grant.vaultwarden]
